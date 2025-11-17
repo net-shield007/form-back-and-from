@@ -82,7 +82,7 @@ export default function FeedbackPage() {
         <label className="block text-sm font-semibold text-gray-800">
           {label} <span className="text-[#D6312F]">*</span>
         </label>
-        <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+        <div className="bg-gray-50 p-4 border border-gray-200">
           <div className="flex items-center justify-between gap-2 mb-2">
             <span className="text-xs font-medium text-gray-500 min-w-[60px]">
               Poor
@@ -100,7 +100,7 @@ export default function FeedbackPage() {
                     className="peer sr-only"
                   />
                   <div
-                    className={`w-10 h-10 rounded-lg border-2 flex items-center justify-center font-semibold text-sm transition-all
+                    className={`w-10 h-10 border-2 flex items-center justify-center font-semibold text-sm transition-all
                     ${
                       value === num
                         ? "bg-[#D6312F] border-[#D6312F] text-white shadow-lg scale-110"
@@ -147,7 +147,7 @@ export default function FeedbackPage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+        <div className="bg-white shadow-xl border border-gray-100 overflow-hidden">
           {/* Welcome Message */}
           <div className="bg-gradient-to-r from-gray-50 to-white p-6 md:p-8 border-b border-gray-200 text-center">
             <span className="block font-semibold text-[#D6312F] text-lg mb-3">
@@ -163,7 +163,7 @@ export default function FeedbackPage() {
           <div className="p-6 md:p-8">
             {/* Success Message */}
             {submitStatus === "success" && (
-              <div className="mb-6 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg animate-fade-in">
+              <div className="mb-6 p-4 bg-green-50 border-l-4 border-green-500 animate-fade-in">
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0">
                     <svg
@@ -194,7 +194,7 @@ export default function FeedbackPage() {
 
             {/* Error Message */}
             {submitStatus === "error" && (
-              <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg animate-fade-in">
+              <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 animate-fade-in">
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0">
                     <svg
@@ -239,7 +239,7 @@ export default function FeedbackPage() {
                     <input
                       type="email"
                       {...register("email")}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white text-black"
+                      className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white text-black"
                       placeholder="your.email@company.com"
                     />
                     {errors.email && (
@@ -268,7 +268,7 @@ export default function FeedbackPage() {
                     <input
                       type="date"
                       {...register("date")}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white text-black"
+                      className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white text-black"
                     />
                     {errors.date && (
                       <p className="text-[#D6312F] text-xs mt-2">
@@ -285,7 +285,7 @@ export default function FeedbackPage() {
                     <input
                       type="text"
                       {...register("contactName")}
-                      className="text-black w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white"
+                      className="text-black w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white"
                       placeholder="John Doe"
                     />
                     {errors.contactName && (
@@ -303,7 +303,7 @@ export default function FeedbackPage() {
                     <input
                       type="text"
                       {...register("companyName")}
-                      className="text-black w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white"
+                      className="text-black w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white"
                       placeholder="Your Company Ltd."
                     />
                     {errors.companyName && (
@@ -321,7 +321,7 @@ export default function FeedbackPage() {
                     <input
                       type="text"
                       {...register("country")}
-                      className="text-black w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white"
+                      className="text-black w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white"
                       placeholder="India"
                     />
                     {errors.country && (
@@ -340,7 +340,7 @@ export default function FeedbackPage() {
                     <input
                       type="text"
                       {...register("salesOrderNumber")}
-                      className="text-black w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white"
+                      className="text-black w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white"
                       placeholder="SO-2025-001"
                     />
                     {errors.salesOrderNumber && (
@@ -391,7 +391,7 @@ export default function FeedbackPage() {
                 <textarea
                   {...register("suggestions")}
                   rows={5}
-                  className="text-black w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all resize-none bg-gray-50 focus:bg-white"
+                  className="text-black w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all resize-none bg-gray-50 focus:bg-white"
                   placeholder="Your feedback is valuable to us. Please share any additional comments or suggestions..."
                 />
               </div>
@@ -400,7 +400,7 @@ export default function FeedbackPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-[#D6312F] to-[#A52520] hover:from-[#A52520] hover:to-[#8B1F1C] text-white font-bold py-4 px-6 rounded-xl transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl"
+                className="w-full bg-gradient-to-r from-[#D6312F] to-[#A52520] hover:from-[#A52520] hover:to-[#8B1F1C] text-white font-bold py-4 px-6 transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl"
               >
                 {isSubmitting ? (
                   <span className="flex items-center justify-center gap-3">
