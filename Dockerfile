@@ -24,5 +24,8 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 
+# important: tell Coolify which port this app uses
+EXPOSE 3000
+
 # run migration AFTER container starts
 CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
