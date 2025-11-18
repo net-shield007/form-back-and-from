@@ -9,10 +9,9 @@ RUN npm install --ignore-scripts
 
 COPY . .
 RUN npx prisma generate
-RUN npx prisma migrate deploy
 RUN npm run build
 
-# 2. Run Stage
+# 2. Runtime Stage
 FROM node:18-alpine AS runner
 WORKDIR /app
 
@@ -20,10 +19,10 @@ RUN apk add --no-cache openssl
 ENV NODE_ENV=production
 
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 
-EXPOSE 3000
-CMD ["npm", "start"]
+# run migration AFTER container starts
+CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
