@@ -28,4 +28,4 @@ COPY --from=builder /app/prisma ./prisma
 EXPOSE 3000
 
 # run migration AFTER container starts
-CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
+CMD ["npm", "start"]
