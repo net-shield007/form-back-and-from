@@ -452,7 +452,7 @@ export default function FeedbackPage() {
             <span className="font-semibold text-[#D6312F]">
               Tritorc Equipments
             </span>
-            . All rights reserved.
+            . All rights reserved .
           </p>
         </div>
       </div>
