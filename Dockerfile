@@ -18,6 +18,8 @@ RUN npm ci --ignore-scripts
 COPY . .
 
 # generate prisma client (needs schema present)
+# FIX for Prisma engine checksum issue
+ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
 RUN npx prisma generate
 
 # disable next eslint during build
@@ -41,11 +43,13 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/lib ./lib
+
 # copy entrypoint
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 3000
+
 # start using entrypoint (runs migrations then start)
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["npm", "start"]
