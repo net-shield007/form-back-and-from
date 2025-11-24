@@ -35,12 +35,35 @@ export default function FeedbackPage() {
     formState: { errors },
     reset,
     watch,
+    setValue,
   } = useForm<FeedbackFormData>({
     resolver: zodResolver(feedbackSchema),
     defaultValues: {
       date: new Date().toISOString().split("T")[0],
     },
   });
+
+  const allValues = watch();
+
+  // Calculate progress
+  const totalFields = 13; // 6 contact fields + 6 ratings + 1 suggestions (optional)
+  const requiredFields = 12; // excluding suggestions
+  const filledFields = [
+    allValues.email,
+    allValues.date,
+    allValues.contactName,
+    allValues.companyName,
+    allValues.country,
+    allValues.salesOrderNumber,
+    allValues.toolBuildQuality,
+    allValues.packaging,
+    allValues.onTimeDelivery,
+    allValues.afterSalesSupport,
+    allValues.productUsability,
+    allValues.recommendationScore,
+  ].filter(Boolean).length;
+
+  const progress = Math.round((filledFields / requiredFields) * 100);
 
   const onSubmit = async (data: FeedbackFormData) => {
     setIsSubmitting(true);
@@ -82,25 +105,30 @@ export default function FeedbackPage() {
         <label className="block text-sm font-semibold text-gray-800">
           {label} <span className="text-[#D6312F]">*</span>
         </label>
-        <div className="bg-gray-50 p-4 border border-gray-200">
-          <div className="flex items-center justify-between gap-2 mb-2">
-            <span className="text-xs font-medium text-gray-500 min-w-[60px]">
+        <div className="bg-gray-50 p-3 sm:p-4 border border-gray-200">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-2">
+            <span className="text-xs font-medium text-gray-500 sm:min-w-[60px]">
               Poor
             </span>
-            <div className="flex gap-2 flex-1 justify-center flex-wrap">
+            <div className="flex gap-1.5 sm:gap-2 flex-1 justify-center flex-wrap">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
                 <label
                   key={num}
                   className="relative flex flex-col items-center cursor-pointer group"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setValue(name, num, { shouldValidate: true });
+                  }}
                 >
                   <input
                     type="radio"
-                    {...register(name, { valueAsNumber: true })}
                     value={num}
+                    checked={value === num}
+                    onChange={() => {}}
                     className="peer sr-only"
                   />
                   <div
-                    className={`w-10 h-10 border-2 flex items-center justify-center font-semibold text-sm transition-all
+                    className={`w-8 h-8 sm:w-10 sm:h-10 border-2 flex items-center justify-center font-semibold text-xs sm:text-sm transition-all
                     ${
                       value === num
                         ? "bg-[#D6312F] border-[#D6312F] text-white shadow-lg scale-110"
@@ -112,7 +140,7 @@ export default function FeedbackPage() {
                 </label>
               ))}
             </div>
-            <span className="text-xs font-medium text-gray-500 min-w-[60px] text-right">
+            <span className="text-xs font-medium text-gray-500 sm:min-w-[60px] sm:text-right">
               Excellent
             </span>
           </div>
@@ -135,39 +163,67 @@ export default function FeedbackPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+      {/* Progress Bar */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
+        <div className="relative h-3 bg-gray-100 rounded-b-xl overflow-hidden">
+          {/* Progress Fill */}
+          <div
+            className="h-full bg-gradient-to-r from-[#D6312F] via-[#E64A48] to-[#A52520] rounded-b-xl transition-all duration-500 ease-out shadow-inner"
+            style={{ width: `${progress}%` }}
+          />
+
+          {/* Floating Bubble Indicator */}
+          {progress > 0 && (
+            <div
+              className="absolute top-1/2 -translate-y-1/2 transition-all duration-500 ease-out"
+              style={{ left: `${progress}%` }}
+            >
+              <div className="relative -ml-8">
+                <div className="bg-[#D6312F] text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-xl whitespace-nowrap border border-white">
+                  {progress}%
+                </div>
+
+                {/* Pointer */}
+                <div className="absolute left-1/2 -translate-x-1/2 -bottom-1 w-2 h-2 bg-[#D6312F] rotate-45 border-l border-b border-white"></div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Header Section */}
-      <div className="bg-white py-6 shadow-lg">
-        <div className="flex justify-center items-center">
+      <div className="bg-white py-3 shadow-lg">
+        <div className="flex justify-center items-center px-4">
           <img
-            src="/images/logo.png" // <-- replace with your actual logo path
+            src="/images/logo.png"
             alt="Tritorc Logo"
-            className="h-12 w-auto object-contain"
+            className="w-44 h-16 sm:w-52 sm:h-20 object-contain"
           />
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
         <div className="bg-white shadow-xl border border-gray-100 overflow-hidden">
           {/* Welcome Message */}
-          <div className="bg-gradient-to-r from-gray-50 to-white p-6 md:p-8 border-b border-gray-200 text-center">
-            <span className="block font-semibold text-[#D6312F] text-lg mb-3">
+          <div className="bg-gradient-to-r from-gray-50 to-white p-4 sm:p-6 md:p-8 border-b border-gray-200 text-center">
+            <span className="block font-semibold text-[#D6312F] text-base sm:text-lg mb-2 sm:mb-3">
               Welcome to the Tritorc Family!
             </span>
-            <p className="text-gray-700 text-base leading-relaxed text-justify md:text-center">
+            <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
               It is great having you be a part of our burgeoning group as a
               valued customer. We would love to hear from you about what you
               think of our products and after-sales services.
             </p>
           </div>
 
-          <div className="p-6 md:p-8">
+          <div className="p-4 sm:p-6 md:p-8">
             {/* Success Message */}
             {submitStatus === "success" && (
               <div className="mb-6 p-4 bg-green-50 border-l-4 border-green-500 animate-fade-in">
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0">
                     <svg
-                      className="w-6 h-6 text-green-600"
+                      className="w-5 h-5 sm:w-6 sm:h-6 text-green-600"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -181,10 +237,10 @@ export default function FeedbackPage() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-green-800 font-semibold">
+                    <p className="text-green-800 font-semibold text-sm sm:text-base">
                       Thank you for your feedback!
                     </p>
-                    <p className="text-green-700 text-sm mt-1">
+                    <p className="text-green-700 text-xs sm:text-sm mt-1">
                       Your response has been recorded successfully.
                     </p>
                   </div>
@@ -198,7 +254,7 @@ export default function FeedbackPage() {
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0">
                     <svg
-                      className="w-6 h-6 text-red-600"
+                      className="w-5 h-5 sm:w-6 sm:h-6 text-red-600"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -212,10 +268,10 @@ export default function FeedbackPage() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-red-800 font-semibold">
+                    <p className="text-red-800 font-semibold text-sm sm:text-base">
                       Submission Failed
                     </p>
-                    <p className="text-red-700 text-sm mt-1">
+                    <p className="text-red-700 text-xs sm:text-sm mt-1">
                       Something went wrong. Please try again.
                     </p>
                   </div>
@@ -226,11 +282,11 @@ export default function FeedbackPage() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Contact Information Section */}
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 border-[#D6312F] inline-block">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 border-[#D6312F] inline-block">
                   Contact Information
                 </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-6">
                   {/* Email */}
                   <div>
                     <label className="block text-sm font-semibold text-gray-800 mb-2">
@@ -239,7 +295,7 @@ export default function FeedbackPage() {
                     <input
                       type="email"
                       {...register("email")}
-                      className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white text-black"
+                      className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white text-black"
                       placeholder="your.email@company.com"
                     />
                     {errors.email && (
@@ -268,7 +324,7 @@ export default function FeedbackPage() {
                     <input
                       type="date"
                       {...register("date")}
-                      className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white text-black"
+                      className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white text-black"
                     />
                     {errors.date && (
                       <p className="text-[#D6312F] text-xs mt-2">
@@ -285,7 +341,7 @@ export default function FeedbackPage() {
                     <input
                       type="text"
                       {...register("contactName")}
-                      className="text-black w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white"
+                      className="text-black w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white"
                       placeholder="John Doe"
                     />
                     {errors.contactName && (
@@ -303,7 +359,7 @@ export default function FeedbackPage() {
                     <input
                       type="text"
                       {...register("companyName")}
-                      className="text-black w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white"
+                      className="text-black w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white"
                       placeholder="Your Company Ltd."
                     />
                     {errors.companyName && (
@@ -321,7 +377,7 @@ export default function FeedbackPage() {
                     <input
                       type="text"
                       {...register("country")}
-                      className="text-black w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white"
+                      className="text-black w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white"
                       placeholder="India"
                     />
                     {errors.country && (
@@ -340,7 +396,7 @@ export default function FeedbackPage() {
                     <input
                       type="text"
                       {...register("salesOrderNumber")}
-                      className="text-black w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white"
+                      className="text-black w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all bg-gray-50 focus:bg-white"
                       placeholder="SO-2025-001"
                     />
                     {errors.salesOrderNumber && (
@@ -354,7 +410,7 @@ export default function FeedbackPage() {
 
               {/* Rating Section */}
               <div className="pt-6 border-t-2 border-gray-100">
-                <h3 className="text-lg font-bold text-gray-900 mb-6 pb-2 border-b-2 border-[#D6312F] inline-block">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-6 pb-2 border-b-2 border-[#D6312F] inline-block">
                   Rate Your Experience
                 </h3>
 
@@ -391,16 +447,16 @@ export default function FeedbackPage() {
                 <textarea
                   {...register("suggestions")}
                   rows={5}
-                  className="text-black w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all resize-none bg-gray-50 focus:bg-white"
+                  className="text-black w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 focus:ring-2 focus:ring-[#D6312F] focus:border-transparent transition-all resize-none bg-gray-50 focus:bg-white"
                   placeholder="Your feedback is valuable to us. Please share any additional comments or suggestions..."
                 />
               </div>
 
-              {/* Submit Button m */}
+              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-[#D6312F] to-[#A52520] hover:from-[#A52520] hover:to-[#8B1F1C] text-white font-bold py-4 px-6 transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl"
+                className="w-full bg-gradient-to-r from-[#D6312F] to-[#A52520] hover:from-[#A52520] hover:to-[#8B1F1C] text-white font-bold py-3 sm:py-4 px-6 text-sm sm:text-base transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl"
               >
                 {isSubmitting ? (
                   <span className="flex items-center justify-center gap-3">
@@ -446,13 +502,13 @@ export default function FeedbackPage() {
         </div>
 
         {/* Footer */}
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-600">
+        <div className="mt-6 sm:mt-8 text-center">
+          <p className="text-xs sm:text-sm text-gray-600">
             © {new Date().getFullYear()}{" "}
             <span className="font-semibold text-[#D6312F]">
               Tritorc Equipments
             </span>
-            . All rights reserved .
+            . All rights reserved.
           </p>
         </div>
       </div>
