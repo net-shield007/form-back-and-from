@@ -20,7 +20,8 @@ async function main() {
     console.log('✅ Admin user created successfully!')
     console.log('📧 Email:', admin.email)
     console.log('🔑 Password: Tritorc@2025')
-    console.log('\nYou can now login at: http://localhost:3000/admin/login')
+    console.log('\nYou can now login at your /admin/login page')
+
   } catch (error) {
     console.error('❌ Error creating admin:', error)
   }
