@@ -4,6 +4,18 @@ import bcrypt from "bcryptjs"
 import { prisma } from "@/lib/prisma"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  debug: true,
+  logger: {
+    error(error) {
+      console.error("NEXTAUTH ERROR:", error);
+    },
+    warn(code) {
+      console.warn("NEXTAUTH WARNING:", code);
+    },
+    debug(code, metadata) {
+      console.debug("NEXTAUTH DEBUG:", code, metadata);
+    }
+  },
   providers: [
     Credentials({
       credentials: {
